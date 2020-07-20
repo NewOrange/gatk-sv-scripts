@@ -1,13 +1,13 @@
 ### CollectCounts(Optional)
-
 collect_coverage参数为true
-
 ***
+#### 前置step:
+Step1_CramtoBam
 
-所用docker:
+#### 所用docker镜像：
+gatksv/gatk:condensecounts-7396ae99aaab07e29c92b509a6515508fbe68158
 
-所用脚本：
-
+#### 所用脚本：
 原版：
 ```shell
 set -euo pipefail

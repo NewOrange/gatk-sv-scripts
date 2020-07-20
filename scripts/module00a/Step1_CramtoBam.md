@@ -1,11 +1,15 @@
 #### CramToBam
 ***
-所用docker:
+#### 前置step:
+无
+
+#### 所用docker镜像：
 gatksv/samtools-cloud:b3af2e3
 
 Tips: This version localizes the cram since samtools does not support streaming from requester pays buckets
 
-测试脚本：
+#### 所用脚本：
+测试：
 ```shell
         set -Eeuo pipefail
 

@@ -1,13 +1,12 @@
 ### Manta
-
 ***
+#### 前置step:
+Step1_CramtoBam
 
-所用docker:
-
+#### 所用docker镜像：
 gatksv/manta:8645aa
 
-测试脚本：
-
+#### 所用脚本：
 原版：
 
 ```shell
