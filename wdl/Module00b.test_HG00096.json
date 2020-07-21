@@ -1,0 +1,19 @@
+{
+  "Module00b.run_vcf_qc" : "false",
+  "Module00b.sv_base_mini_docker": "gatksv/sv-base-mini:b3af2e3",
+  "Module00b.sv_pipeline_docker": "cwhelan/sv-pipeline:cw_3c9d26c_single_sample_annotations",
+  "Module00b.sv_pipeline_qc_docker": "gatksv/sv-pipeline-qc:b3af2e3",
+  "Module00b.wgd_scoring_mask": "file:///mnt/d/Works/genes/0629/gatk/data/gcp-public-data--broad-references/hg38/v0/sv-resources/resources/v1/wgd_scoring_mask.hg38.gnomad_v3.bed",
+  "Module00b.genome_file": "file:///mnt/d/Works/genes/0629/gatk/data/gcp-public-data--broad-references/hg38/v0/sv-resources/resources/v1/hg38.genome",
+
+  "Module00b.batch": "test_hg00096",
+  "Module00b.counts": [
+    "module00a.Step2: counts_100bp.HG00096.tsv.gz的生成路径"
+  ],
+  "Module00b.manta_vcfs": [
+    "file:///mnt/d/Works/genes/0629/gatk/out/0720/0001/HG00096.manta.vcf.gz"
+  ],
+  "Module00b.samples": [
+    "HG00096"
+  ]
+}
