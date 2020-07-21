@@ -85,3 +85,14 @@ python2 /usr/local/bin/manta/libexec/convertInversion.py \
 bgzip -c diploidSV.vcf > HG0096.manta.vcf.gz
 tabix -p vcf HG0096.manta.vcf.gz
 ```
+
+获取有chr22,chr15染色体信息的bam文件：
+```
+samtools view -b -h /mnt/d/Works/genes/0629/gatk/data/fc-56ac46ea-efc4-4683-b6d5-6d95bed41c5e/CCDG_13607/Project_CCDG_13607_B01_GRM_WGS.cram.2019-02-06/Sample_HG00096/analysis/HG00096.final.bam chr15 chr22 > /mnt/d/Works/genes/0629/gatk/data/fc-56ac46ea-efc4-4683-b6d5-6d95bed41c5e/CCDG_13607/Project_CCDG_13607_B01_GRM_WGS.cram.2019-02-06/Sample_HG00096/analysis/HG00096.part.bam
+
+samtools sort /mnt/d/Works/genes/0629/gatk/data/fc-56ac46ea-efc4-4683-b6d5-6d95bed41c5e/CCDG_13607/Project_CCDG_13607_B01_GRM_WGS.cram.2019-02-06/Sample_HG00096/analysis/HG00096.part.sort.bam
+
+samtools index /mnt/d/Works/genes/0629/gatk/data/fc-56ac46ea-efc4-4683-b6d5-6d95bed41c5e/CCDG_13607/Project_CCDG_13607_B01_GRM_WGS.cram.2019-02-06/Sample_HG00096/analysis/HG00096.part.sort.bam
+```
+
+以切分的bam文件作为输入，运行manta
