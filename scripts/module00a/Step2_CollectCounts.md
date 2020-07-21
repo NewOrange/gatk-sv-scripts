@@ -1,14 +1,19 @@
-### CollectCounts(Optional)
+# CollectCounts(Optional)
+
 collect_coverage参数为true
-***
-#### 前置step:
+
+## 前置step
+
 Step1_CramtoBam
 
-#### 所用docker镜像：
+#### 所用docker镜像
+
 gatksv/gatk:condensecounts-7396ae99aaab07e29c92b509a6515508fbe68158
 
-#### 所用脚本：
+#### 所用脚本
+
 原版：
+
 ```shell
 set -euo pipefail
 export GATK_LOCAL_JAR=~{default="/root/gatk.jar" gatk4_jar_override}
@@ -28,6 +33,7 @@ bgzip ~{sample_id}.counts.tsv
 ```
 
 测试：
+
 ```shell
 set -euo pipefail
 export GATK_LOCAL_JAR=~{default="/root/gatk.jar" gatk4_jar_override}

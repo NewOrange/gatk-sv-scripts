@@ -133,12 +133,69 @@ total 9.4M
 
 获取有chr22,chr15染色体信息的bam文件：
 
-```shell
-samtools view -b -h /mnt/d/Works/genes/0629/gatk/data/fc-56ac46ea-efc4-4683-b6d5-6d95bed41c5e/CCDG_13607/Project_CCDG_13607_B01_GRM_WGS.cram.2019-02-06/Sample_HG00096/analysis/HG00096.final.bam chr15 chr22 > /mnt/d/Works/genes/0629/gatk/data/fc-56ac46ea-efc4-4683-b6d5-6d95bed41c5e/CCDG_13607/Project_CCDG_13607_B01_GRM_WGS.cram.2019-02-06/Sample_HG00096/analysis/HG00096.part.bam
+```bash
+cd /mnt/d/Works/genes/0629/gatk/scripts/
+cat > step3_manta.HG00096.part.pre.sh << 'EOF'
+cd /mnt/d/Works/genes/0629/gatk/data/fc-56ac46ea-efc4-4683-b6d5-6d95bed41c5e/CCDG_13607/Project_CCDG_13607_B01_GRM_WGS.cram.2019-02-06/Sample_HG00096/analysis/
 
-samtools sort /mnt/d/Works/genes/0629/gatk/data/fc-56ac46ea-efc4-4683-b6d5-6d95bed41c5e/CCDG_13607/Project_CCDG_13607_B01_GRM_WGS.cram.2019-02-06/Sample_HG00096/analysis/HG00096.part.sort.bam
-
-samtools index /mnt/d/Works/genes/0629/gatk/data/fc-56ac46ea-efc4-4683-b6d5-6d95bed41c5e/CCDG_13607/Project_CCDG_13607_B01_GRM_WGS.cram.2019-02-06/Sample_HG00096/analysis/HG00096.part.sort.bam
+samtools view -b -h HG00096.final.bam chr22 > HG00096.part.bam
+samtools index HG00096.part.bam
+EOF
+bash step3_manta.HG00096.part.pre.sh > out/step3_manta.HG00096.part.pre.sh.0721.out 2>&1 &
+tail -f out/step3_manta.HG00096.part.pre.sh.0721.out
 ```
 
-以切分的bam文件作为输入，运行manta
+以切分的bam文件作为输入，运行manta：
+
+```bash
+docker run --name manta --rm -it \
+-v /mnt/d/Works/genes/0629/gatk/scripts:/scripts \
+-v /mnt/d/Works/genes/0629/gatk/data:/data \
+-v /mnt/d/Works/genes/0629/gatk/out:/out \
+gatksv/manta:8645aa
+
+cat > /mnt/d/Works/genes/0629/gatk/scripts/step3_manta.HG00096.part.sh << 'EOF'
+mkdir -p /out/0721/0001
+cd /out/0721/0001
+
+set -Eeuo pipefail
+
+# if a preemptible instance restarts and runWorkflow.py already
+# exists, manta will throw an error
+if [ -f ./runWorkflow.py ]; then
+  rm ./runWorkflow.py
+fi
+
+# prepare the analysis job
+/usr/local/bin/manta/bin/configManta.py \
+  --bam /data/fc-56ac46ea-efc4-4683-b6d5-6d95bed41c5e/CCDG_13607/Project_CCDG_13607_B01_GRM_WGS.cram.2019-02-06/Sample_HG00096/analysis/HG00096.part.bam \
+  --referenceFasta /data/gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.fasta \
+  --runDir . \
+  --callRegions /data/gcp-public-data--broad-references/hg38/v0/sv-resources/resources/v1/primary_contigs_plus_mito.bed.gz
+
+# always tell manta there are 2 GiB per job, otherwise it will
+# scale back the requested number of jobs, even if they won't
+# need that much memory
+./runWorkflow.py \
+  --mode local \
+  --jobs 2 \
+  --memGb 4
+
+# inversion conversion, then compression and index
+python2 /usr/local/bin/manta/libexec/convertInversion.py \
+  /usr/local/bin/samtools \
+  /data/gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.fasta \
+  results/variants/diploidSV.vcf.gz \
+  | bcftools reheader -s <(echo "HG00096") \
+  > diploidSV.vcf
+
+bgzip -c diploidSV.vcf > HG00096.part.manta.vcf.gz
+tabix -p vcf HG00096.part.manta.vcf.gz
+EOF
+
+# in docker
+bash /scripts/step3_manta.HG00096.part.sh > /scripts/out/step3_manta.HG00096.part.sh.0721.out 2>&1 &
+
+## out docker
+tail -f /mnt/d/Works/genes/0629/gatk/scripts/out/step3_manta.HG00096.part.sh.0721.out
+```
