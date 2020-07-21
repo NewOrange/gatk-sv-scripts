@@ -129,16 +129,11 @@ total 9.4M
 -rw-r--r-- 1 root root  98K Jul 21 06:49 diploidSV.vcf.gz.tbi
 ```
 
-### 0721a
-
-获取有chr22,chr15染色体信息的bam文件：
+获取有chr22染色体信息的bam文件：
 
 ```shell
-samtools view -b -h /mnt/d/Works/genes/0629/gatk/data/fc-56ac46ea-efc4-4683-b6d5-6d95bed41c5e/CCDG_13607/Project_CCDG_13607_B01_GRM_WGS.cram.2019-02-06/Sample_HG00096/analysis/HG00096.final.bam chr15 chr22 > /mnt/d/Works/genes/0629/gatk/data/fc-56ac46ea-efc4-4683-b6d5-6d95bed41c5e/CCDG_13607/Project_CCDG_13607_B01_GRM_WGS.cram.2019-02-06/Sample_HG00096/analysis/HG00096.part.bam
+samtools view -b -h HG00096.final.bam chr22 > HG00096.part.bam
 
-samtools sort /mnt/d/Works/genes/0629/gatk/data/fc-56ac46ea-efc4-4683-b6d5-6d95bed41c5e/CCDG_13607/Project_CCDG_13607_B01_GRM_WGS.cram.2019-02-06/Sample_HG00096/analysis/HG00096.part.sort.bam
-
-samtools index /mnt/d/Works/genes/0629/gatk/data/fc-56ac46ea-efc4-4683-b6d5-6d95bed41c5e/CCDG_13607/Project_CCDG_13607_B01_GRM_WGS.cram.2019-02-06/Sample_HG00096/analysis/HG00096.part.sort.bam
+samtools index HG00096.part.bam
 ```
-
 以切分的bam文件作为输入，运行manta
