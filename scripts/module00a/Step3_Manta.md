@@ -129,9 +129,7 @@ total 9.4M
 -rw-r--r-- 1 root root  98K Jul 21 06:49 diploidSV.vcf.gz.tbi
 ```
 
-### 0721a
-
-获取有chr22,chr15染色体信息的bam文件：
+获取有chr22染色体信息的bam文件：
 
 ```bash
 cd /mnt/d/Works/genes/0629/gatk/scripts/
