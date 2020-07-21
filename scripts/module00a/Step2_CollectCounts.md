@@ -36,7 +36,7 @@ bgzip ~{sample_id}.counts.tsv
 
 ```shell
 set -euo pipefail
-export GATK_LOCAL_JAR=~{default="/root/gatk.jar" gatk4_jar_override}
+export GATK_LOCAL_JAR="/root/gatk.jar"
 
 gatk --java-options "-Xmx3500m" CollectReadCounts \
 	-L /mnt/d/Works/genes/0629/gatk/data/gatk-sv-resources-public/hg38/v0/sv-resources/resources/v1/preprocessed_intervals.interval_list \
@@ -44,10 +44,10 @@ gatk --java-options "-Xmx3500m" CollectReadCounts \
 	--reference /mnt/d/Works/genes/0629/gatk/data/gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.fasta \
 	--format TSV \
 	--interval-merging-rule OVERLAPPING_ONLY \
-	--output HG0096.counts.tsv \
+	--output HG00096.counts.tsv \
 	--disable-read-filter MappingQualityReadFilter
 
-sed -ri "s/@RG\tID:GATKCopyNumber\tSM:.+/@RG\tID:GATKCopyNumber\tSM:~HG0096/g" HG0096.counts.tsv
+sed -ri "s/@RG\tID:GATKCopyNumber\tSM:.+/@RG\tID:GATKCopyNumber\tSM:~HG00096/g" HG00096.counts.tsv
 
-bgzip HG0096.counts.tsv
+bgzip HG00096.counts.tsv
 ```
