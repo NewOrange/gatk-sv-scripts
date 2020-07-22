@@ -48,7 +48,7 @@ bgzip -c diploidSV.vcf > ~{sample_id}.manta.vcf.gz
 tabix -p vcf ~{sample_id}.manta.vcf.gz
 ```
 
-测试：
+## 测试：
 
 ### 0720a
 
@@ -129,7 +129,7 @@ total 9.4M
 -rw-r--r-- 1 root root  98K Jul 21 06:49 diploidSV.vcf.gz.tbi
 ```
 
-获取有chr22染色体信息的bam文件：
+### 获取有chr22染色体信息的bam文件并进行测试
 
 ```bash
 cd /mnt/d/Works/genes/0629/gatk/scripts/
@@ -196,4 +196,27 @@ bash /scripts/step3_manta.HG00096.part.sh > /scripts/out/step3_manta.HG00096.par
 
 ## out docker
 tail -f /mnt/d/Works/genes/0629/gatk/scripts/out/step3_manta.HG00096.part.sh.0721.out
+```
+test by 2tong:
+```
+step03
+├── diploidSV.vcf
+├── HG00096.chr22.manta.vcf.gz
+├── HG00096.chr22.manta.vcf.gz.tbi
+└── results
+    ├── evidence
+    ├── stats
+    │   ├── alignmentStatsSummary.txt
+    │   ├── svCandidateGenerationStats.tsv
+    │   ├── svCandidateGenerationStats.xml
+    │   └── svLocusGraphStats.tsv
+    └── variants
+        ├── candidateSmallIndels.vcf.gz
+        ├── candidateSmallIndels.vcf.gz.tbi
+        ├── candidateSV.vcf.gz
+        ├── candidateSV.vcf.gz.tbi
+        ├── diploidSV.vcf.gz
+        └── diploidSV.vcf.gz.tbi
+
+4 directories, 13 files
 ```
