@@ -1,5 +1,6 @@
 {
   "Module00b.run_vcf_qc" : "false",
+  "Module00b.run_ploidy" : "false",
   "Module00b.sv_base_mini_docker": "gatksv/sv-base-mini:b3af2e3",
   "Module00b.sv_pipeline_docker": "cwhelan/sv-pipeline:cw_3c9d26c_single_sample_annotations",
   "Module00b.sv_pipeline_qc_docker": "gatksv/sv-pipeline-qc:b3af2e3",
