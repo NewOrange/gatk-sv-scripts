@@ -52,7 +52,7 @@ cwhelan/sv-pipeline:cw_3c9d26c_single_sample_annotations
 很快
 
 #### 生成文件目录
-```
+```xml
 step04
 ├── HG00096.chr22.disc.txt.gz
 ├── HG00096.chr22.disc.txt.gz.tbi
