@@ -1,22 +1,19 @@
 ### MakeBincovMatrix
 ***
 #### 前置step:
-Module 00a.Step2
+Module 00a.2-call-CollectCounts
 
 #### 所用docker镜像：
-Todo
+ibio01:5000/gatksv/sv-base-mini:b3af2e3
 
-#### 所用脚本：
+#### 测试脚本：
 测试：
 ```shell
-cd /cromwell-executions/Module00b/8c27f4b2-ef29-44de-8ff1-0b3759a09e8e/call-MakeBincovMatrix/execution
-
 set -eu
 
 # make the CollectReadCounts output consistent with the old bincov code
 # determine what format this is
-firstchar=$(gunzip -c /cromwell-executions/Module00b/8c27f4b2-ef29-44de-8ff1-0b3759a09e8e/call-MakeBincovMatrix/inputs/1502637668/HG00096.counts.tsv.gz
-| head -c 1)
+firstchar=$(gunzip -c /.../HG00096.counts.tsv.gz | head -c 1)
 set -o pipefail
 if [ $firstchar == '@' ]; then
   shift=1  # GATK CollectReadCounts (to convert from 1-based closed intervals)
@@ -25,7 +22,7 @@ else
 fi
 
 # kill the dictionary | kill the header | adjust to bed format: 0-based half-open intervals
-zcat /cromwell-executions/Module00b/8c27f4b2-ef29-44de-8ff1-0b3759a09e8e/call-MakeBincovMatrix/inputs/1502637668/HG00096.counts.tsv.gz \
+zcat /.../HG00096.counts.tsv.gz \
   | sed '/^@/d' \
   | sed '/^CONTIG       START   END     COUNT$/d' \
   | sed '/^#/d' \
@@ -46,7 +43,7 @@ mv locs2 locs
 
 mkdir cargo
 fileNo=0
-for fil in /cromwell-executions/Module00b/8c27f4b2-ef29-44de-8ff1-0b3759a09e8e/call-MakeBincovMatrix/inputs/1502637668/HG00096.counts.tsv.gz
+for fil in /.../HG00129.counts.tsv.gz
 do
   set +o pipefail
   firstchar=$(gunzip -c $fil | head -c 1)
@@ -63,39 +60,47 @@ do
     | awk -v x="${shift}" -v b=$binsize \
       'BEGIN{OFS="\t"}{$2=$2-x; if ($3-$2==b) print $0}' > fil.bincov.bed
   if ! cut -f1-3 fil.bincov.bed | cmp locs; then
-    echo $fil has different intervals than /cromwell-executions/Module00b/8c27f4b2-ef29-44de-8ff1-0b3759a09e8e/call-MakeBincovMatrix/inputs/1502637668/H
-G00096.counts.tsv.gz
+    echo $fil has different intervals than /.../HG00096.counts.tsv.gz
     exit 1
   fi
   cut -f4- fil.bincov.bed > cargo/`printf "%08d" $fileNo`
   ((++fileNo))
 done
 
-echo "#Chr      Start   End     HG00096" > test_hg00096.bincov.bed
-paste locs cargo/* >> test_hg00096.bincov.bed
-bgzip test_hg00096.bincov.bed
-tabix test_hg00096.bincov.bed.gz
+echo "#Chr      Start   End     HG00096 HG00129" > ref_panel_1kg_v1_2tong.bincov.bed
+paste locs cargo/* >> ref_panel_1kg_v1_2tong.bincov.bed
+bgzip ref_panel_1kg_v1_2tong.bincov.bed
+tabix ref_panel_1kg_v1_2tong.bincov.bed.gz
 ```
 
-#### 生成结果
+#### 测试目录
+
+所在目录：/home/user/zhangtong/gatksv_run/cromwell-executions/GATKSVPipelineBatch/c76f7770-cc74-4e71-a5fd-bdbf97b16bc3/call-Module00b/Module00b/8ec11479-4a39-4d1f-ab41-61c8d2a96f11/call-MakeBincovMatrix/execution
+
 ```xml
 .
 ├── cargo
-│   └── 00000000
+│   ├── 00000000
+│   └── 00000001
 ├── docker_cid
 ├── fil.bincov.bed
 ├── locs
 ├── most_common_binsize.txt
 ├── rc
+├── ref_panel_1kg_v1_2tong.bincov.bed.gz
+├── ref_panel_1kg_v1_2tong.bincov.bed.gz.tbi
 ├── script
 ├── script.background
 ├── script.submit
 ├── stderr
 ├── stderr.background
 ├── stdout
-├── stdout.background
-├── test_hg00096.bincov.bed.gz
-└── test_hg00096.bincov.bed.gz.tbi
+└── stdout.background
 
-1 directory, 15 files
+1 directory, 16 files
+```
+#### 生成文件
+```
+ref_panel_1kg_v1_2tong.bincov.bed.gz
+ref_panel_1kg_v1_2tong.bincov.bed.gz.tbi
 ```
